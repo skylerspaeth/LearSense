@@ -48,7 +48,10 @@ client.on('ready', () => {
 client.on('message', msg => {
 	let guild = msg.guild;
 	if ((msg.channel.name === 'lear' || msg.channel.name === 'sense') && msg.author.id !== client.user.id) {
-		msg.channel.send(`${guild.member(msg.author) ? guild.member(msg.author).displayName : msg.author.username} said: "${learify(msg.content)}"`);
+		msg.channel.send([
+			`${guild.member(msg.author) ? guild.member(msg.author).displayName : msg.author.username} said: "${learify(msg.content)}"`,
+			`LearLang Translation: "${learify(msg.content)}"`
+		][Math.floor(Math.random() * 2)]);
 	}
 });
 
