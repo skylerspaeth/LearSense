@@ -1,5 +1,10 @@
 const Discord = require('discord.js');
-const client = new Discord.Client();
+const settings = {
+	ws: {
+		properties: { $browser: "Discord iOS" }
+	}
+};
+const client = new Discord.Client(settings);
 const token = require('./token.json').token;
 const utterances = require('./utterances.json').utterances;
 
@@ -8,15 +13,15 @@ function getWord() {
 }
 
 function isAlpha(str) {
-  var code, i, len;
+	var code, i, len;
 
-  for (i = 0, len = str.length; i < len; i++) {
-    code = str.charCodeAt(i);
-    if (!(code > 64 && code < 91) && !(code > 96 && code < 123)) {
-      return false;
-    }
-  }
-  return true;
+	for (i = 0, len = str.length; i < len; i++) {
+		code = str.charCodeAt(i);
+		if (!(code > 64 && code < 91) && !(code > 96 && code < 123)) {
+			return false;
+		}
+	}
+	return true;
 };
 
 function learify(text) {
@@ -34,6 +39,10 @@ function learify(text) {
 
 client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag}!`);
+	client.user.setActivity("GitHub", {
+		type: "WATCHING",
+		url: "https://github.com/skylerspaeth/LearSense"
+	});
 });
 
 client.on('message', msg => {
