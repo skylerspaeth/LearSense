@@ -1,8 +1,8 @@
 const Discord = require('discord.js');
 const settings = {
-	ws: {
-		properties: { $browser: "Discord iOS" }
-	}
+ws: {
+properties: { $browser: "Discord iOS" }
+    }
 };
 const client = new Discord.Client(settings);
 const token = require('./token.json').token;
@@ -28,9 +28,9 @@ function learify(text) {
 	if (text.includes(" ")) {
 		let ret = "";
 		text.split(" ").forEach((word) => {
-			if (isAlpha(word)) ret += getWord();
-			else ret += word + " ";
-		});
+				if (isAlpha(word)) ret += getWord();
+				else ret += word + " ";
+				});
 		return ret;
 	} else {
 		return "LEARSENSE";
@@ -38,21 +38,24 @@ function learify(text) {
 }
 
 client.on('ready', () => {
-	console.log(`Logged in as ${client.user.tag}!`);
-	client.user.setActivity("GitHub", {
-		type: "WATCHING",
-		url: "https://github.com/skylerspaeth/LearSense"
-	});
+		console.log(`Logged in as ${client.user.tag}!`);
+		client.user.setActivity("GitHub", {
+type: "WATCHING",
+url: "https://github.com/skylerspaeth/LearSense"
 });
+		});
 
 client.on('message', msg => {
-	let guild = msg.guild;
-	if ((msg.channel.name === 'lear' || msg.channel.name === 'sense') && msg.author.id !== client.user.id) {
+		let guild = msg.guild;
+		if (msg.content === '|creation') {
+			msg.reply(`You were created on ${msg.author.createdAt.toLocaleDateString()}.`);
+		}
+		if ((msg.channel.name === 'lear' || msg.channel.name === 'sense') && msg.author.id !== client.user.id && msg.content !== '|creation') {
 		msg.channel.send([
 			`${guild.member(msg.author) ? guild.member(msg.author).displayName : msg.author.username} said: "${learify(msg.content)}"`,
 			`LearLang Translation: "${learify(msg.content)}"`
-		][Math.floor(Math.random() * 2)]);
-	}
-});
+			][Math.floor(Math.random() * 2)]);
+		}
+		});
 
 client.login(token);
