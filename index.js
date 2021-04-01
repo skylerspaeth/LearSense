@@ -7,6 +7,7 @@ properties: { $browser: "Discord iOS" }
 const client = new Discord.Client(settings);
 const token = require('./token.json').token;
 const utterances = require('./utterances.json').utterances;
+const creationTrigger = '|creation';
 
 function getWord() {
 	return utterances[Math.floor(Math.random() * utterances.length)].toUpperCase() + " ";
@@ -47,10 +48,14 @@ url: "https://github.com/skylerspaeth/LearSense"
 
 client.on('message', msg => {
 		let guild = msg.guild;
-		if (msg.content === '|creation') {
-			msg.reply(`You were created on ${msg.author.createdAt.toLocaleDateString()}.`);
+		if (msg.content.startsWith(creationTrigger)) {
+			if (msg.mentions.users.first()) {
+				msg.reply(`${msg.mentions.users.first().username} was created on ${msg.mentions.users.first().createdAt.toLocaleDateString()}`);
+			} else {
+				msg.reply(`You were created on ${msg.author.createdAt.toLocaleDateString()}. Mention a user next time you run the ${creationTrigger} command to find out when they were created! For instance: |creation @User#1234`);
+			}
 		}
-		if ((msg.channel.name === 'lear' || msg.channel.name === 'sense') && msg.author.id !== client.user.id && msg.content !== '|creation') {
+		if ((msg.channel.name === 'lear' || msg.channel.name === 'sense') && msg.author.id !== client.user.id && !(msg.content.startsWith(creationTrigger))) {
 		msg.channel.send([
 			`${guild.member(msg.author) ? guild.member(msg.author).displayName : msg.author.username} said: "${learify(msg.content)}"`,
 			`LearLang Translation: "${learify(msg.content)}"`
