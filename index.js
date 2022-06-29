@@ -5,8 +5,7 @@ const settings = {
   }
 };
 const client = new Discord.Client(settings);
-const token = require('./token.json').token;
-const utterances = require('./utterances.json').utterances;
+const { token, utterances } = require('./config.json');
 const creationTrigger = '|creation';
 
 function getWord() {
